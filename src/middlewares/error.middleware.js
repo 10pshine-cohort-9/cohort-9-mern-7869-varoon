@@ -11,11 +11,26 @@ function errorHandler(err, req, res, _next) {
   const statusCode = err.statusCode || 500;
   const message = err.message || 'Internal server error';
 
+  // Use the pino-http child logger attached to the request when available,
+  // fall back to the root logger otherwise.
+  const log = req.log || logger;
+
   // Log the full error for non-operational (unexpected) errors
   if (!(err instanceof ApiError) || !err.isOperational) {
-    logger.error({ err }, 'Unhandled error');
+    log.error(
+      { err, method: req.method, url: req.originalUrl, statusCode },
+      'Unhandled error — %s %s',
+      req.method,
+      req.originalUrl,
+    );
   } else {
-    logger.warn({ statusCode, message }, 'Operational error');
+    log.warn(
+      { statusCode, method: req.method, url: req.originalUrl },
+      'Operational error — %s %s: %s',
+      req.method,
+      req.originalUrl,
+      message,
+    );
   }
 
   res.status(statusCode).json({

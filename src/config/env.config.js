@@ -8,6 +8,7 @@ const config = Object.freeze({
   // Server
   port: parseInt(process.env.PORT, 10) || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
+  logLevel: process.env.LOG_LEVEL || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
 
   // Database
   db: Object.freeze({
