@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const pinoHttp = require('pino-http');
 const logger = require('./utils/logger');
 const errorHandler = require('./middlewares/error.middleware');
+const ApiError = require('./utils/api-error');
 const authRoutes = require('./routes/auth.routes');
 const notesRoutes = require('./routes/notes.routes');
 
@@ -66,8 +67,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/v1/notes', notesRoutes);
 
 // ─── 404 catch-all ─────────────────────────────────────────────
-app.use((_req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
+app.use((req, _res, next) => {
+  next(ApiError.notFound(`Route not found: ${req.method} ${req.originalUrl}`));
 });
 
 // ─── Global error handler ──────────────────────────────────────
