@@ -1,16 +1,15 @@
 /**
- * Mocha root hooks — runs before/after the entire test suite.
- * Configure shared setup (e.g., test DB connections) here.
+ * Mocha root hooks — shared setup/teardown for the entire test suite.
+ *
+ * - Restores all sinon stubs after every test so tests don't leak state.
+ * - Re-exports `expect` and `sinon` for convenience.
  */
-
+const sinon = require('sinon');
 const { expect } = require('chai');
 
-// Re-export expect for convenience in test files
-module.exports = { expect };
-
-// ─── Smoke test ────────────────────────────────────────────────
-describe('Test setup', function () {
-  it('should run a basic smoke test', function () {
-    expect(true).to.equal(true);
-  });
+// Restore all stubs/spies/mocks after each test
+afterEach(() => {
+  sinon.restore();
 });
+
+module.exports = { expect, sinon };
