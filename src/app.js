@@ -54,7 +54,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/v1/notes', notesRoutes);
+app.use('/api/notes', notesRoutes);
 
 app.use((req, _res, next) => {
   next(ApiError.notFound(`Route not found: ${req.method} ${req.originalUrl}`));
