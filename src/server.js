@@ -5,14 +5,12 @@ const { testConnection } = require('./config/db.config');
 
 async function start() {
   try {
-    // Verify database connectivity before accepting requests
     await testConnection();
 
     const server = app.listen(config.port, () => {
       logger.info(`🚀 Server running on port ${config.port} [${config.nodeEnv}]`);
     });
 
-    // ─── Graceful shutdown ───────────────────────────────────────
     const shutdown = (signal) => {
       logger.info(`${signal} received — shutting down gracefully`);
       server.close(() => {

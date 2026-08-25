@@ -4,7 +4,6 @@ import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 
-// Mock the auth API module (required by AuthProvider)
 vi.mock('../api/auth', () => ({
   signupApi: vi.fn(),
   loginApi: vi.fn(),
@@ -12,7 +11,6 @@ vi.mock('../api/auth', () => ({
 }));
 
 function renderWithRoute({ initialEntries, authenticated = false }) {
-  // If authenticated, seed localStorage before render
   if (authenticated) {
     localStorage.setItem('token', 'fake-jwt-token');
     localStorage.setItem(

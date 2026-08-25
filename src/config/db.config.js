@@ -13,10 +13,6 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-/**
- * Pings the database to verify connectivity.
- * @returns {Promise<void>}
- */
 async function testConnection() {
   const connection = await pool.getConnection();
   try {

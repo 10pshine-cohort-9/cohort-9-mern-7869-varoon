@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 
-// Polyfill localStorage for jsdom test environment
 if (typeof globalThis.localStorage === 'undefined') {
   const store = {};
   globalThis.localStorage = {

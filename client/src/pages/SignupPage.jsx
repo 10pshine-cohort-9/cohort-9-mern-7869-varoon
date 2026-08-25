@@ -59,7 +59,6 @@ export default function SignupPage() {
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear field error on change
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }

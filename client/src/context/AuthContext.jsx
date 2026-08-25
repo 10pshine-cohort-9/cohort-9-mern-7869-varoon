@@ -3,10 +3,6 @@ import { signupApi, loginApi, logoutApi } from '../api/auth';
 
 const AuthContext = createContext(null);
 
-/**
- * Provides auth state (user, token) and actions (login, signup, logout)
- * to the entire component tree.
- */
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem('user');
@@ -41,7 +37,6 @@ export function AuthProvider({ children }) {
     try {
       await logoutApi();
     } catch {
-      // Even if the API call fails, clear local state
     }
     setUser(null);
     setToken(null);
@@ -56,9 +51,6 @@ export function AuthProvider({ children }) {
   );
 }
 
-/**
- * Hook to access auth context. Must be used within an AuthProvider.
- */
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

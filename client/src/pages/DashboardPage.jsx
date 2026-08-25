@@ -33,7 +33,6 @@ export default function DashboardPage() {
 
   return (
     <div className="dashboard">
-      {/* ── Header / Nav ─────────────────────────────────── */}
       <header className="dashboard-header">
         <h1 className="app-title"><img src="/notesIcon.png" width={38} alt="Notes icon" /> Notes App</h1>
         <div className="header-right">
@@ -44,7 +43,6 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* ── Main content ─────────────────────────────────── */}
       <main className="dashboard-main">
         <div className="dashboard-toolbar">
           <h2>My Notes</h2>
@@ -53,7 +51,6 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* ── Empty state (placeholder until notes API is built) ── */}
         <div className="empty-state">
           <div className="empty-state-icon"><Icon /></div>
           <p className="empty-state-text">No notes yet — create your first note!</p>

@@ -1,4 +1,3 @@
-/* ─── Reset & Base ──────────────────────────────────────────── */
 *,
 *::before,
 *::after {
@@ -26,7 +25,6 @@ body {
   line-height: 1.6;
 }
 
-/* ─── Auth Pages (Login / Signup) ───────────────────────────── */
 .auth-page {
   min-height: 100vh;
   display: flex;
@@ -55,7 +53,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* ─── Forms ─────────────────────────────────────────────────── */
 .form-group {
   margin-bottom: 1rem;
 }
@@ -116,7 +113,6 @@ body {
   text-decoration: underline;
 }
 
-/* ─── Buttons ───────────────────────────────────────────────── */
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -155,7 +151,6 @@ body {
   background: var(--white-color);
 }
 
-/* ─── Dashboard ─────────────────────────────────────────────── */
 .dashboard {
   min-height: 100vh;
   display: flex;
@@ -214,7 +209,6 @@ body {
   width: auto;
 }
 
-/* ─── Empty state ───────────────────────────────────────────── */
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
@@ -230,7 +224,6 @@ body {
   font-size: 1rem;
 }
 
-/* ─── Placeholder page ──────────────────────────────────────── */
 .placeholder-page {
   min-height: 100vh;
   display: flex;
