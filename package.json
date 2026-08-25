@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/varoonkumar1/cohort-9-mern-7869-varoon#readme",
   "dependencies": {
+    "@lordicon/react": "^1.11.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
