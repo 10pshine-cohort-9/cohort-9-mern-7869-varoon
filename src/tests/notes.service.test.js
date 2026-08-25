@@ -30,6 +30,14 @@ describe('Notes Service', function () {
       expect(result).to.have.lengthOf(2);
       expect(noteModel.findAllByUser.calledOnceWith(1)).to.be.true;
     });
+
+    it('should return empty array when user has no notes', async function () {
+      sinon.stub(noteModel, 'findAllByUser').resolves([]);
+
+      const result = await notesService.getNotes(1);
+
+      expect(result).to.be.an('array').that.is.empty;
+    });
   });
 
   describe('getNoteById()', function () {
@@ -63,7 +71,7 @@ describe('Notes Service', function () {
         expect.fail('Should have thrown');
       } catch (err) {
         expect(err.statusCode).to.equal(403);
-        expect(err.message).to.include('do not have access');
+        expect(err.message).to.equal('Not authorized to access this note');
       }
     });
   });
@@ -78,6 +86,7 @@ describe('Notes Service', function () {
       const result = await notesService.updateNote(1, 1, 'New', 'New body');
 
       expect(result.title).to.equal('New');
+      expect(result.content).to.equal('New body');
     });
 
     it('should throw 404 if note does not exist', async function () {
@@ -88,6 +97,7 @@ describe('Notes Service', function () {
         expect.fail('Should have thrown');
       } catch (err) {
         expect(err.statusCode).to.equal(404);
+        expect(err.message).to.equal('Note not found');
       }
     });
 
@@ -99,12 +109,13 @@ describe('Notes Service', function () {
         expect.fail('Should have thrown');
       } catch (err) {
         expect(err.statusCode).to.equal(403);
+        expect(err.message).to.equal('Not authorized to modify this note');
       }
     });
   });
 
   describe('deleteNote()', function () {
-    it('should delete the note', async function () {
+    it('should delete the note successfully', async function () {
       sinon.stub(noteModel, 'findById').resolves({ id: 1, user_id: 1 });
       sinon.stub(noteModel, 'remove').resolves(true);
 
@@ -121,6 +132,7 @@ describe('Notes Service', function () {
         expect.fail('Should have thrown');
       } catch (err) {
         expect(err.statusCode).to.equal(404);
+        expect(err.message).to.equal('Note not found');
       }
     });
 
@@ -132,12 +144,13 @@ describe('Notes Service', function () {
         expect.fail('Should have thrown');
       } catch (err) {
         expect(err.statusCode).to.equal(403);
+        expect(err.message).to.equal('Not authorized to delete this note');
       }
     });
   });
 
   describe('searchNotes()', function () {
-    it('should return matching notes', async function () {
+    it('should return matching notes for keyword search', async function () {
       const fakeNotes = [{ id: 1, user_id: 1, title: 'Meeting', content: 'Notes from meeting' }];
       sinon.stub(noteModel, 'search').resolves(fakeNotes);
 
@@ -145,6 +158,22 @@ describe('Notes Service', function () {
 
       expect(result).to.have.lengthOf(1);
       expect(noteModel.search.calledOnceWith(1, 'meeting', null, null)).to.be.true;
+    });
+
+    it('should pass date range params to the model', async function () {
+      sinon.stub(noteModel, 'search').resolves([]);
+
+      await notesService.searchNotes(1, 'test', '2026-01-01', '2026-12-31');
+
+      expect(noteModel.search.calledOnceWith(1, 'test', '2026-01-01', '2026-12-31')).to.be.true;
+    });
+
+    it('should return empty array when no matches found', async function () {
+      sinon.stub(noteModel, 'search').resolves([]);
+
+      const result = await notesService.searchNotes(1, 'nonexistent', null, null);
+
+      expect(result).to.be.an('array').that.is.empty;
     });
   });
 });

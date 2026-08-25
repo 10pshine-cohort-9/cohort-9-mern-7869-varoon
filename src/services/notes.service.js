@@ -25,10 +25,11 @@ async function getNoteById(noteId, userId) {
   }
 
   if (note.user_id !== userId) {
-    log.warn({ userId, noteId }, 'Forbidden — note belongs to another user');
-    throw ApiError.forbidden('You do not have access to this note');
+    log.warn({ userId, noteId, ownerId: note.user_id }, 'Not authorized to access this note');
+    throw ApiError.forbidden('Not authorized to access this note');
   }
 
+  log.debug({ userId, noteId }, 'Note retrieved');
   return note;
 }
 
@@ -41,8 +42,8 @@ async function updateNote(noteId, userId, title, content) {
   }
 
   if (existing.user_id !== userId) {
-    log.warn({ userId, noteId }, 'Update forbidden — note belongs to another user');
-    throw ApiError.forbidden('You do not have access to this note');
+    log.warn({ userId, noteId, ownerId: existing.user_id }, 'Not authorized to modify this note');
+    throw ApiError.forbidden('Not authorized to modify this note');
   }
 
   const updated = await noteModel.update(noteId, title, content);
@@ -59,8 +60,8 @@ async function deleteNote(noteId, userId) {
   }
 
   if (existing.user_id !== userId) {
-    log.warn({ userId, noteId }, 'Delete forbidden — note belongs to another user');
-    throw ApiError.forbidden('You do not have access to this note');
+    log.warn({ userId, noteId, ownerId: existing.user_id }, 'Not authorized to delete this note');
+    throw ApiError.forbidden('Not authorized to delete this note');
   }
 
   await noteModel.remove(noteId);
@@ -69,7 +70,7 @@ async function deleteNote(noteId, userId) {
 
 async function searchNotes(userId, query, fromDate, toDate) {
   const notes = await noteModel.search(userId, query, fromDate, toDate);
-  log.debug({ userId, query, count: notes.length }, 'Notes search completed');
+  log.debug({ userId, query, fromDate, toDate, count: notes.length }, 'Notes search completed');
   return notes;
 }
 
