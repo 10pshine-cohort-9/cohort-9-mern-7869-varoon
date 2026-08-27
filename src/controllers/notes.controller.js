@@ -1,7 +1,6 @@
 const notesService = require('../services/notes.service');
 const asyncHandler = require('../utils/async-handler');
 
-/** Emit a Socket.IO event to the user's private room */
 function emitToUser(req, event, payload) {
   const io = req.app.get('io');
   if (io) {

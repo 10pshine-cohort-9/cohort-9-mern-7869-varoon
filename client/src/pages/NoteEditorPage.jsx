@@ -33,7 +33,6 @@ export default function NoteEditorPage() {
   const [fetching, setFetching] = useState(isEditMode);
   const [error, setError] = useState('');
 
-  /* Load existing note in edit mode */
   useEffect(() => {
     if (!isEditMode) return;
 

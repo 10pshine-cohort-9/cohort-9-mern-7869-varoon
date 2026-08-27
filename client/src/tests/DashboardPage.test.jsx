@@ -4,8 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import DashboardPage from '../pages/DashboardPage';
 
-/* ── Mocks ────────────────────────────────────── */
-
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -33,7 +31,6 @@ vi.mock('../api/notes', () => ({
   importNotesApi: (...args) => mockImportNotes(...args),
 }));
 
-/* Mock socket.io-client to avoid real connections */
 vi.mock('socket.io-client', () => ({
   io: () => ({
     on: vi.fn(),
@@ -43,7 +40,6 @@ vi.mock('socket.io-client', () => ({
   }),
 }));
 
-/* Mock @lordicon/react */
 vi.mock('@lordicon/react', () => ({
   Player: () => <div data-testid="lordicon-player" />,
 }));
@@ -72,8 +68,6 @@ function renderDashboard() {
     </MemoryRouter>,
   );
 }
-
-/* ── Tests ────────────────────────────────────── */
 
 describe('DashboardPage', () => {
   beforeEach(() => {
@@ -203,7 +197,6 @@ describe('DashboardPage', () => {
         { timeout: 1000 },
       );
 
-      /* Clear search — getNotesApi should be called again */
       mockGetNotes.mockClear();
       mockGetNotes.mockResolvedValue(sampleNotes);
       await user.clear(searchInput);

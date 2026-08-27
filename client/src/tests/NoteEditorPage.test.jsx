@@ -4,8 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import NoteEditorPage from '../pages/NoteEditorPage';
 
-/* ── Mocks ────────────────────────────────────── */
-
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -22,7 +20,6 @@ vi.mock('../api/notes', () => ({
   getNoteByIdApi: (...args) => mockGetNoteById(...args),
 }));
 
-/* Mock react-quill-new — renders a simple textarea for testing */
 vi.mock('react-quill-new', () => ({
   __esModule: true,
   default: ({ value, onChange, placeholder }) => (
@@ -35,8 +32,6 @@ vi.mock('react-quill-new', () => ({
   ),
 }));
 vi.mock('react-quill-new/dist/quill.snow.css', () => ({}));
-
-/* ── Helpers ──────────────────────────────────── */
 
 function renderCreateMode() {
   return render(
@@ -57,8 +52,6 @@ function renderEditMode(noteId = '1') {
     </MemoryRouter>,
   );
 }
-
-/* ── Tests ────────────────────────────────────── */
 
 describe('NoteEditorPage', () => {
   beforeEach(() => {

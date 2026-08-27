@@ -21,7 +21,6 @@ export function SocketProvider({ children, onNoteEvent }) {
     });
 
     socket.on('connect', () => {
-      /* Connected successfully */
     });
 
     socket.on('note:created', (note) => {
@@ -37,7 +36,6 @@ export function SocketProvider({ children, onNoteEvent }) {
     });
 
     socket.on('connect_error', () => {
-      /* Socket connection error — will auto-retry */
     });
 
     socketRef.current = socket;

@@ -32,11 +32,6 @@ export async function searchNotesApi(query) {
   return response.data.data;
 }
 
-/**
- * Bulk-import notes by creating each one sequentially.
- * @param {Array<{title: string, content: string}>} notes
- * @returns {Promise<Array>} created notes
- */
 export async function importNotesApi(notes) {
   const results = [];
   for (const note of notes) {

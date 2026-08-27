@@ -19,10 +19,8 @@ async function start() {
       },
     });
 
-    /* Make io available to controllers via req.app.get('io') */
     app.set('io', io);
 
-    /* Authenticate socket connections using JWT */
     io.use((socket, next) => {
       const token = socket.handshake.auth?.token;
 

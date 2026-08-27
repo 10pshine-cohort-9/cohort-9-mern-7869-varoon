@@ -31,14 +31,12 @@ function BookIcon() {
   );
 }
 
-/** Strip HTML tags for a plain-text preview */
 function stripHtml(html) {
   if (!html) return '';
   const doc = new DOMParser().parseFromString(html, 'text/html');
   return doc.body.textContent || '';
 }
 
-/** Format a date string into a readable format */
 function formatDate(dateStr) {
   if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('en-US', {
@@ -60,7 +58,6 @@ function DashboardContent() {
   const [error, setError] = useState('');
   const debounceTimerRef = useRef(null);
 
-  /** Fetch all notes from the API */
   const fetchNotes = useCallback(async () => {
     try {
       setError('');
@@ -74,7 +71,6 @@ function DashboardContent() {
     }
   }, []);
 
-  /** Search notes with debounce */
   const handleSearch = useCallback(async (query) => {
     try {
       setError('');
@@ -91,7 +87,6 @@ function DashboardContent() {
     }
   }, []);
 
-  /** Handle search input with debounce */
   const handleSearchChange = useCallback((e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -105,7 +100,6 @@ function DashboardContent() {
     }, DEBOUNCE_DELAY_MS);
   }, [handleSearch]);
 
-  /* Cleanup debounce timer on unmount */
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current) {
@@ -114,12 +108,10 @@ function DashboardContent() {
     };
   }, []);
 
-  /* Initial note fetch */
   useEffect(() => {
     fetchNotes();
   }, [fetchNotes]);
 
-  /** Handle note deletion with confirmation */
   const handleDelete = useCallback(async (noteId, noteTitle) => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${noteTitle}"? This cannot be undone.`
@@ -136,7 +128,6 @@ function DashboardContent() {
     }
   }, []);
 
-  /** Export all notes as a JSON file download */
   const handleExport = useCallback(() => {
     const exportData = notes.map(({ title, content }) => ({ title, content }));
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
@@ -150,7 +141,6 @@ function DashboardContent() {
     URL.revokeObjectURL(url);
   }, [notes]);
 
-  /** Import notes from a JSON file */
   const handleImport = useCallback(async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -185,11 +175,9 @@ function DashboardContent() {
       }
     }
 
-    /* Reset file input so the same file can be re-imported */
     e.target.value = '';
   }, [fetchNotes]);
 
-  /** Handle real-time Socket.IO events */
   const handleNoteEvent = useCallback((eventType, data) => {
     switch (eventType) {
       case 'created':
@@ -238,7 +226,6 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* Search & Utility Bar */}
           <div className="dashboard-search-bar">
             <input
               type="text"

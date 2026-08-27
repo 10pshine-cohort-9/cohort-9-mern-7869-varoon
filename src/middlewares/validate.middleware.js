@@ -4,10 +4,6 @@ const ApiError = require('../utils/api-error');
 const TITLE_MAX_LENGTH = 255;
 const CONTENT_MAX_LENGTH = 50000;
 
-/**
- * Builds a note schema with shared field definitions.
- * Both create and update use the same shape.
- */
 function buildNoteSchema() {
   return Joi.object({
     title: Joi.string().trim().min(1).max(TITLE_MAX_LENGTH).required()
