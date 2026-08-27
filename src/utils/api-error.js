@@ -1,13 +1,4 @@
-/**
- * Custom operational error class for the API.
- * Distinguishes trusted (operational) errors from programmer bugs.
- */
 class ApiError extends Error {
-  /**
-   * @param {number} statusCode - HTTP status code
-   * @param {string} message    - Human-readable error message
-   * @param {boolean} [isOperational=true] - Whether this is a trusted operational error
-   */
   constructor(statusCode, message, isOperational = true) {
     super(message);
     this.statusCode = statusCode;

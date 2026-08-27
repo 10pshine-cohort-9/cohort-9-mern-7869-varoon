@@ -9,14 +9,6 @@ const logger = pino({
       : undefined,
 });
 
-/**
- * Creates a child logger tagged with a component name.
- * Usage: const log = createChildLogger('auth');
- *        log.info({ email }, 'User signed up');
- *
- * @param {string} component - Logical component name (e.g. 'auth', 'notes', 'db')
- * @returns {import('pino').Logger}
- */
 function createChildLogger(component) {
   return logger.child({ component });
 }

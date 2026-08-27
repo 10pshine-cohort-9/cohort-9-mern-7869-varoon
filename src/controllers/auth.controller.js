@@ -5,14 +5,9 @@ const { createChildLogger } = require('../utils/logger');
 
 const log = createChildLogger('auth-controller');
 
-/**
- * POST /api/auth/signup
- * Body: { name, email, password }
- */
 const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  // ─── Input validation ────────────────────────────────────────
   if (!name || !email || !password) {
     req.log.warn({ email }, 'Signup failed — missing fields');
     throw ApiError.badRequest('Name, email, and password are required');
@@ -22,7 +17,6 @@ const signup = asyncHandler(async (req, res) => {
     throw ApiError.badRequest('Name must be at least 2 characters');
   }
 
-  // Basic email format check
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     throw ApiError.badRequest('Invalid email format');
@@ -48,14 +42,9 @@ const signup = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * POST /api/auth/login
- * Body: { email, password }
- */
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  // ─── Input validation ────────────────────────────────────────
   if (!email || !password) {
     req.log.warn('Login failed — missing credentials');
     throw ApiError.badRequest('Email and password are required');
@@ -77,13 +66,7 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * POST /api/auth/logout
- * Stateless JWT — the client discards the token.
- * This endpoint logs the event and returns a success response.
- */
 const logout = asyncHandler(async (req, res) => {
-  // req.user is attached by the auth middleware
   const userId = req.user && req.user.id;
 
   authService.logout(userId);

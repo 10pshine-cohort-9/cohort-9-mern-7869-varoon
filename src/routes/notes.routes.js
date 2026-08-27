@@ -1,12 +1,18 @@
 const { Router } = require('express');
+const notesController = require('../controllers/notes.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { validate, createNoteSchema, updateNoteSchema } = require('../middlewares/validate.middleware');
 
 const router = Router();
 
-// TODO: All routes below should be protected by auth middleware
-// TODO: POST   /       → notesController.createNote
-// TODO: GET    /       → notesController.getNotes
-// TODO: GET    /:id    → notesController.getNoteById
-// TODO: PUT    /:id    → notesController.updateNote
-// TODO: DELETE /:id    → notesController.deleteNote
+router.use(authenticate);
+
+router.get('/search', notesController.searchNotes);
+
+router.post('/', validate(createNoteSchema), notesController.createNote);
+router.get('/', notesController.getNotes);
+router.get('/:id', notesController.getNoteById);
+router.put('/:id', validate(updateNoteSchema), notesController.updateNote);
+router.delete('/:id', notesController.deleteNote);
 
 module.exports = router;

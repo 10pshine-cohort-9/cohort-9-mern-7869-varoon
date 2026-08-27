@@ -9,9 +9,6 @@ const bcrypt = require('bcrypt');
 const config = require('../config/env.config');
 
 describe('Auth Controller (HTTP)', function () {
-  // ─────────────────────────────────────────────────────────────
-  // POST /api/auth/signup
-  // ─────────────────────────────────────────────────────────────
   describe('POST /api/auth/signup', function () {
     it('should register a user and return 201 with token', async function () {
       sinon.stub(userModel, 'findByEmail').resolves(null);
@@ -31,7 +28,6 @@ describe('Auth Controller (HTTP)', function () {
       expect(res.body.data).to.have.property('token');
       expect(res.body.data.user.email).to.equal('varoon@example.com');
 
-      // Verify returned token is valid
       const decoded = jwt.verify(res.body.data.token, config.jwt.secret);
       expect(decoded).to.have.property('id', 1);
     });
@@ -39,7 +35,7 @@ describe('Auth Controller (HTTP)', function () {
     it('should return 400 when required fields are missing', async function () {
       const res = await request(app)
         .post('/api/auth/signup')
-        .send({ email: 'test@example.com' }) // missing name and password
+        .send({ email: 'test@example.com' })
         .expect(400);
 
       expect(res.body.success).to.be.false;
@@ -93,9 +89,6 @@ describe('Auth Controller (HTTP)', function () {
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // POST /api/auth/login
-  // ─────────────────────────────────────────────────────────────
   describe('POST /api/auth/login', function () {
     it('should login and return 200 with token', async function () {
       sinon.stub(userModel, 'findByEmail').resolves({
@@ -118,7 +111,7 @@ describe('Auth Controller (HTTP)', function () {
     it('should return 400 when email or password is missing', async function () {
       const res = await request(app)
         .post('/api/auth/login')
-        .send({ email: 'test@example.com' }) // missing password
+        .send({ email: 'test@example.com' })
         .expect(400);
 
       expect(res.body.success).to.be.false;
@@ -154,9 +147,6 @@ describe('Auth Controller (HTTP)', function () {
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // POST /api/auth/logout
-  // ─────────────────────────────────────────────────────────────
   describe('POST /api/auth/logout', function () {
     it('should return 200 with a valid token', async function () {
       const token = jwt.sign({ id: 1, name: 'Test', email: 'test@example.com' }, config.jwt.secret, { expiresIn: '1h' });
@@ -190,7 +180,6 @@ describe('Auth Controller (HTTP)', function () {
     });
 
     it('should return 401 with an expired token', async function () {
-      // Sign a token that expired 1 hour ago
       const token = jwt.sign(
         { id: 1, name: 'Test', email: 'test@example.com' },
         config.jwt.secret,
@@ -207,9 +196,6 @@ describe('Auth Controller (HTTP)', function () {
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // Error response format
-  // ─────────────────────────────────────────────────────────────
   describe('Error response envelope', function () {
     it('should return { success, message, statusCode } on any error', async function () {
       const res = await request(app)

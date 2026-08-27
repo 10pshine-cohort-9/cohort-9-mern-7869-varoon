@@ -8,14 +8,11 @@ const authService = require('../services/auth.service');
 const config = require('../config/env.config');
 
 describe('Auth Service', function () {
-  // ─────────────────────────────────────────────────────────────
-  // register()
-  // ─────────────────────────────────────────────────────────────
   describe('register()', function () {
     it('should register a new user and return user + JWT', async function () {
       const fakeUser = { id: 1, name: 'Varoon', email: 'varoon@example.com', created_at: new Date() };
 
-      sinon.stub(userModel, 'findByEmail').resolves(null);           // no duplicate
+      sinon.stub(userModel, 'findByEmail').resolves(null);
       sinon.stub(userModel, 'createUser').resolves(fakeUser);
       sinon.stub(bcrypt, 'hash').resolves('$2b$10$hashedpassword');
 
@@ -25,12 +22,10 @@ describe('Auth Service', function () {
       expect(result).to.have.property('token');
       expect(result.user).to.deep.include({ id: 1, name: 'Varoon', email: 'varoon@example.com' });
 
-      // Token should be a valid JWT
       const decoded = jwt.verify(result.token, config.jwt.secret);
       expect(decoded).to.have.property('id', 1);
       expect(decoded).to.have.property('email', 'varoon@example.com');
 
-      // Verify stubs were called correctly
       expect(userModel.findByEmail.calledOnceWith('varoon@example.com')).to.be.true;
       expect(bcrypt.hash.calledOnce).to.be.true;
       expect(userModel.createUser.calledOnce).to.be.true;
@@ -60,9 +55,6 @@ describe('Auth Service', function () {
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // login()
-  // ─────────────────────────────────────────────────────────────
   describe('login()', function () {
     it('should return user + JWT for valid credentials', async function () {
       const storedUser = {
@@ -114,9 +106,6 @@ describe('Auth Service', function () {
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // generateToken()
-  // ─────────────────────────────────────────────────────────────
   describe('generateToken()', function () {
     it('should return a valid JWT containing user data', function () {
       const user = { id: 5, name: 'Test', email: 'test@example.com' };
@@ -128,13 +117,10 @@ describe('Auth Service', function () {
       expect(decoded).to.have.property('id', 5);
       expect(decoded).to.have.property('name', 'Test');
       expect(decoded).to.have.property('email', 'test@example.com');
-      expect(decoded).to.have.property('exp'); // has expiry
+      expect(decoded).to.have.property('exp');
     });
   });
 
-  // ─────────────────────────────────────────────────────────────
-  // logout()
-  // ─────────────────────────────────────────────────────────────
   describe('logout()', function () {
     it('should not throw (stateless — just logs)', function () {
       expect(() => authService.logout(1)).to.not.throw();
