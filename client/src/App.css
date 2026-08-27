@@ -15,6 +15,11 @@
   --orangeHover-color: #ae6424;
   --orange-color: #b66925;
   --light-green: #606c38;
+  --danger-color: #c0392b;
+  --danger-hover: #a93226;
+  --card-bg: #344e1f;
+  --card-border: #4a6e2a;
+  --search-bg: #3d5a24;
 }
 
 body {
@@ -24,6 +29,8 @@ body {
   color: var(--white-color);
   line-height: 1.6;
 }
+
+/* ─── Auth Pages ─────────────────────────── */
 
 .auth-page {
   min-height: 100vh;
@@ -52,6 +59,8 @@ body {
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
 }
+
+/* ─── Form Elements ──────────────────────── */
 
 .form-group {
   margin-bottom: 1rem;
@@ -113,6 +122,8 @@ body {
   text-decoration: underline;
 }
 
+/* ─── Buttons ────────────────────────────── */
+
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -123,7 +134,11 @@ body {
   border: none;
   text-decoration: none;
   text-align: center;
-  transition: background-color 0.2s, opacity 0.2s;
+  transition: background-color 0.2s, opacity 0.2s, transform 0.15s;
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {
@@ -151,11 +166,27 @@ body {
   background: var(--white-color);
 }
 
+.btn-danger {
+  background: var(--danger-color);
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
+
+.btn-sm {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+/* ─── Dashboard Layout ───────────────────── */
+
 .dashboard {
   min-height: 100vh;
   display: flex;
-  flex-direction: column; 
-  
+  flex-direction: column;
 }
 
 .dashboard-header {
@@ -188,7 +219,7 @@ body {
 
 .dashboard-main {
   flex: 1;
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
   margin: 0 auto;
   padding: 2rem 1.5rem;
@@ -198,16 +229,75 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .dashboard-toolbar h2 {
   font-size: 1.25rem;
 }
 
+.toolbar-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .dashboard-toolbar .btn-primary {
   width: auto;
 }
+
+/* ─── Search & Utility Bar ───────────────── */
+
+.dashboard-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--search-bg);
+  color: var(--white-color);
+  font-size: 0.9rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input::placeholder {
+  color: var(--whitelight-color);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--earth-yellow);
+  box-shadow: 0 0 0 2px rgba(221, 161, 94, 0.25);
+}
+
+.utility-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.import-label {
+  cursor: pointer;
+  position: relative;
+}
+
+.import-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ─── Empty State ────────────────────────── */
 
 .empty-state {
   text-align: center;
@@ -224,6 +314,180 @@ body {
   font-size: 1rem;
 }
 
+/* ─── Notes Grid ─────────────────────────── */
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.note-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.note-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.note-card-body {
+  flex: 1;
+  margin-bottom: 0.75rem;
+}
+
+.note-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  word-break: break-word;
+  color: var(--earth-yellow);
+}
+
+.note-card-preview {
+  font-size: 0.85rem;
+  color: var(--whitelight-color);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+  word-break: break-word;
+}
+
+.note-card-date {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.note-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--card-border);
+}
+
+/* ─── Note Editor Page ───────────────────── */
+
+.editor-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.editor-container {
+  background: var(--green-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.editor-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.editor-title-input {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  background: var(--search-bg);
+  color: var(--white-color);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.editor-title-input::placeholder {
+  color: var(--whitelight-color);
+}
+
+.editor-title-input:focus {
+  outline: none;
+  border-color: var(--earth-yellow);
+  box-shadow: 0 0 0 2px rgba(221, 161, 94, 0.25);
+}
+
+.editor-content-group {
+  margin-bottom: 1.5rem;
+}
+
+.editor-loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--whitelight-color);
+  font-size: 1rem;
+}
+
+/* Quill editor overrides for dark theme */
+.editor-content-group .ql-toolbar {
+  background: var(--search-bg);
+  border-color: var(--card-border);
+  border-radius: 6px 6px 0 0;
+}
+
+.editor-content-group .ql-toolbar .ql-stroke {
+  stroke: var(--whitelight-color);
+}
+
+.editor-content-group .ql-toolbar .ql-fill {
+  fill: var(--whitelight-color);
+}
+
+.editor-content-group .ql-toolbar .ql-picker-label {
+  color: var(--whitelight-color);
+}
+
+.editor-content-group .ql-toolbar button:hover .ql-stroke,
+.editor-content-group .ql-toolbar button.ql-active .ql-stroke {
+  stroke: var(--earth-yellow);
+}
+
+.editor-content-group .ql-toolbar button:hover .ql-fill,
+.editor-content-group .ql-toolbar button.ql-active .ql-fill {
+  fill: var(--earth-yellow);
+}
+
+.editor-content-group .ql-container {
+  background: var(--search-bg);
+  border-color: var(--card-border);
+  border-radius: 0 0 6px 6px;
+  color: var(--white-color);
+  min-height: 250px;
+  font-size: 0.95rem;
+}
+
+.editor-content-group .ql-editor.ql-blank::before {
+  color: var(--whitelight-color);
+  font-style: italic;
+}
+
+/* ─── Editor Actions ─────────────────────── */
+
+.editor-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.editor-save-btn {
+  width: auto;
+  flex: 1;
+}
+
+.editor-cancel-btn {
+  width: auto;
+}
+
+/* ─── Placeholder Page ───────────────────── */
+
 .placeholder-page {
   min-height: 100vh;
   display: flex;
@@ -236,4 +500,37 @@ body {
 
 .placeholder-page h1 {
   color: #333;
+}
+
+/* ─── Responsive ─────────────────────────── */
+
+@media (max-width: 600px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .dashboard-toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+  }
+
+  .dashboard-search-bar {
+    flex-direction: column;
+  }
+
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-actions {
+    flex-direction: column;
+  }
+
+  .editor-save-btn,
+  .editor-cancel-btn {
+    width: 100%;
+  }
 }

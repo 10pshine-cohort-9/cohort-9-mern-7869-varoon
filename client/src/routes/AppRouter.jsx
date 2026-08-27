@@ -3,7 +3,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import DashboardPage from '../pages/DashboardPage';
-import NewNotePage from '../pages/NewNotePage';
+import NoteEditorPage from '../pages/NoteEditorPage';
 
 export default function AppRouter() {
   return (
@@ -15,7 +15,8 @@ export default function AppRouter() {
       {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/notes/new" element={<NewNotePage />} />
+        <Route path="/notes/new" element={<NoteEditorPage />} />
+        <Route path="/notes/:id/edit" element={<NoteEditorPage />} />
       </Route>
 
       {/* Catch-all → redirect to dashboard (ProtectedRoute handles auth check) */}
