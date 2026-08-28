@@ -1,6 +1,9 @@
 const logger = require('../utils/logger');
 const ApiError = require('../utils/api-error');
 const config = require('../config/env.config');
+
+const INTERNAL_SERVER_ERROR_CODE = 500;
+
 function errorHandler(err, req, res, _next) {
   const log = req.log || logger;
 
@@ -18,7 +21,7 @@ function errorHandler(err, req, res, _next) {
     err.cause = original;
   }
 
-  const statusCode = err.statusCode || 500;
+  const statusCode = err.statusCode || INTERNAL_SERVER_ERROR_CODE;
   const isOperational = err instanceof ApiError && err.isOperational;
 
   const message =

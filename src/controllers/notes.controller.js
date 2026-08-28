@@ -1,8 +1,12 @@
 const notesService = require('../services/notes.service');
 const asyncHandler = require('../utils/async-handler');
-const { createChildLogger } = require('../utils/logger');
 
-const log = createChildLogger('notes-controller');
+function emitToUser(req, event, payload) {
+  const io = req.app.get('io');
+  if (io) {
+    io.to(`user:${req.user.id}`).emit(event, payload);
+  }
+}
 
 const createNote = asyncHandler(async (req, res) => {
   const userId = req.user.id;
@@ -13,6 +17,8 @@ const createNote = asyncHandler(async (req, res) => {
   const note = await notesService.createNote(userId, title, content);
 
   req.log.info({ userId, noteId: note.id }, 'Note created successfully');
+
+  emitToUser(req, 'note:created', note);
 
   res.status(201).json({
     success: true,
@@ -65,6 +71,8 @@ const updateNote = asyncHandler(async (req, res) => {
 
   req.log.info({ userId, noteId }, 'Note updated successfully');
 
+  emitToUser(req, 'note:updated', note);
+
   res.status(200).json({
     success: true,
     message: 'Note updated successfully',
@@ -81,6 +89,8 @@ const deleteNote = asyncHandler(async (req, res) => {
   await notesService.deleteNote(noteId, userId);
 
   req.log.info({ userId, noteId }, 'Note deleted successfully');
+
+  emitToUser(req, 'note:deleted', { id: noteId });
 
   res.status(200).json({
     success: true,
