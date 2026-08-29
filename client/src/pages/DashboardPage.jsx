@@ -10,6 +10,8 @@ import {
 } from '../api/notes';
 import { Player } from '@lordicon/react';
 import bookIcon from '../assets/bookIcon.json';
+import pencilIcon from '../assets/pencilL.json';
+import deleteIcon from '../assets/trash.json';
 
 const DEBOUNCE_DELAY_MS = 300;
 
@@ -28,6 +30,62 @@ function BookIcon() {
         colors="primary:#121331,secondary:#f4dc9c,quaternary:#e8b730"
       />
     </div>
+  );
+}
+
+function PencilIcon({ playerRef }) {
+  return (
+    <div style={{ display: 'inline-block', cursor: 'pointer' }}>
+      <Player
+        ref={playerRef}
+        icon={pencilIcon}
+        size={22}
+        colors="primary:#000000,secondary:#ffc738,quaternary:#e83a30"
+      />
+    </div>
+  );
+}
+
+function DeleteIcon({ playerRef }) {
+  return (
+    <div style={{ display: 'inline-block', cursor: 'pointer' }}>
+      <Player
+        ref={playerRef}
+        icon={deleteIcon}
+        size={22}
+        colors="primary:#000000,secondary:#848484,quaternary:#646e78"
+      />
+    </div>
+  );
+}
+
+function EditLink({ noteId }) {
+  const playerRef = useRef(null);
+
+  return (
+    <Link
+      to={`/notes/${noteId}/edit`}
+      className="btn btn-sm edit-btn btn-primary"
+      id={`edit-note-${noteId}`}
+      onClick={(e) => e.stopPropagation()}
+      onMouseEnter={() => playerRef.current?.playFromBeginning()}
+    >
+      <PencilIcon playerRef={playerRef} /> Edit
+    </Link>
+  );
+}
+
+function DeleteButton({ noteId, noteTitle, handleDelete }) {
+  const playerRef = useRef(null);
+
+  return (
+    <button
+      className="btn btn-sm delete-btn btn-danger"
+      onClick={(e) => { e.stopPropagation(); handleDelete(noteId, noteTitle); }}
+      onMouseEnter={() => playerRef.current?.playFromBeginning()}
+    >
+      <DeleteIcon playerRef={playerRef} /> Delete
+    </button>
   );
 }
 
@@ -56,6 +114,7 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState('');
+  const [selectedNote, setSelectedNote] = useState(null);
   const debounceTimerRef = useRef(null);
 
   const fetchNotes = useCallback(async () => {
@@ -196,6 +255,28 @@ function DashboardContent() {
     }
   }, []);
 
+  const openNoteModal = useCallback((note) => {
+    setSelectedNote(note);
+  }, []);
+
+  const closeNoteModal = useCallback(() => {
+    setSelectedNote(null);
+  }, []);
+
+  useEffect(() => {
+    function handleEsc(e) {
+      if (e.key === 'Escape') closeNoteModal();
+    }
+    if (selectedNote) {
+      document.addEventListener('keydown', handleEsc);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = '';
+    };
+  }, [selectedNote, closeNoteModal]);
+
   async function handleLogout() {
     await logout();
     navigate('/login');
@@ -273,39 +354,64 @@ function DashboardContent() {
               </p>
             </div>
           ) : (
-            <div className="notes-grid">
-              {notes.map((note) => (
-                <div key={note.id} className="note-card">
-                  <div className="note-card-body">
-                    <h3 className="note-card-title">{note.title}</h3>
-                    <p className="note-card-preview">
-                      {stripHtml(note.content).slice(0, 150)}
-                      {stripHtml(note.content).length > 150 ? '...' : ''}
-                    </p>
-                    <span className="note-card-date">
-                      {formatDate(note.updated_at)}
-                    </span>
+            <>
+              <div className="notes-grid">
+                {notes.map((note) => (
+                  <div
+                    key={note.id}
+                    className="note-card"
+                    onClick={() => openNoteModal(note)}
+                    style={{ cursor: 'pointer' }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter') openNoteModal(note); }}
+                    id={`note-card-${note.id}`}
+                  >
+                    <div className="note-card-body">
+                      <h3 className="note-card-title">{note.title}</h3>
+                      <p className="note-card-preview">
+                        {stripHtml(note.content).slice(0, 150)}
+                        {stripHtml(note.content).length > 150 ? '...' : ''}
+                      </p>
+                      <span className="note-card-date">
+                        {formatDate(note.updated_at)}
+                      </span>
+                    </div>
+                    <div className="note-card-actions">
+                      <EditLink noteId={note.id} />
+
+                      <DeleteButton noteId={note.id} noteTitle={note.title} handleDelete={handleDelete} />
+                    </div>
                   </div>
-                  <div className="note-card-actions">
-                    <Link
-                      to={`/notes/${note.id}/edit`}
-                      className="btn btn-outline btn-sm"
-                      id={`edit-note-${note.id}`}
-                    >
-                      ✏️ Edit
-                    </Link>
+                ))}
+              </div>
+
+              {selectedNote && (
+                <div className="note-modal-overlay" onClick={closeNoteModal} id="note-modal-overlay">
+                  <div className="note-modal" onClick={(e) => e.stopPropagation()} id="note-modal">
                     <button
-                      type="button"
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(note.id, note.title)}
-                      id={`delete-note-${note.id}`}
+                      className="note-modal-close"
+                      onClick={closeNoteModal}
+                      aria-label="Close"
+                      id="note-modal-close-btn"
                     >
-                      🗑️ Delete
+                      ✕
                     </button>
+                    <h2 className="note-modal-title">{selectedNote.title}</h2>
+                    <span className="note-modal-date">{formatDate(selectedNote.updated_at)}</span>
+                    <div
+                      className="note-modal-content"
+                      dangerouslySetInnerHTML={{ __html: selectedNote.content }}
+                    />
+                    <div className="note-modal-actions">
+                      <EditLink noteId={selectedNote.id} />
+
+                      <DeleteButton noteId={selectedNote.id} noteTitle={selectedNote.title} handleDelete={handleDelete} />
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </main>
       </div>

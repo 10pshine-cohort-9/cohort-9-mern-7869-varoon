@@ -141,7 +141,7 @@ body {
 .btn-primary {
   background: var(--orange-color);
   color: #fff;
-  width: 100%;
+  
 }
 
 .btn-primary:hover {
@@ -364,6 +364,14 @@ body {
   border-top: 1px solid var(--card-border);
 }
 
+.edit-btn,
+.delete-btn {
+  display: flex;
+  align-items: center;
+  gap: 3px
+}
+
+
 
 .editor-page {
   min-height: 100vh;
@@ -492,6 +500,172 @@ body {
 }
 
 
+/* ── Note Full-View Modal ─────────────────── */
+
+.note-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  animation: modalOverlayIn 0.25s ease-out;
+}
+
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.note-modal {
+  background: var(--green-color);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 680px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(221, 161, 94, 0.15);
+  animation: modalSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.note-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--whitelight-color);
+  font-size: 1.15rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.note-modal-close:hover {
+  background: var(--danger-color);
+  color: #fff;
+  border-color: var(--danger-color);
+  transform: rotate(90deg);
+}
+
+.note-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--earth-yellow);
+  margin-bottom: 0.35rem;
+  padding-right: 2.5rem;
+  word-break: break-word;
+}
+
+.note-modal-date {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--card-border);
+  width: 100%;
+}
+
+.note-modal-content {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--whitelight-color);
+  word-break: break-word;
+  margin-bottom: 1.5rem;
+  min-height: 80px;
+}
+
+.note-modal-content p {
+  margin-bottom: 0.75rem;
+}
+
+.note-modal-content h1,
+.note-modal-content h2,
+.note-modal-content h3 {
+  color: var(--white-color);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.note-modal-content ul,
+.note-modal-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.note-modal-content a {
+  color: var(--earth-yellow);
+  text-decoration: underline;
+}
+
+.note-modal-content code {
+  background: var(--search-bg);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.88rem;
+}
+
+.note-modal-content pre {
+  background: var(--search-bg);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 0.75rem;
+}
+
+.note-modal-content blockquote {
+  border-left: 3px solid var(--earth-yellow);
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: #aaa;
+}
+
+.note-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--card-border);
+}
+
+/* Scrollbar styling inside modal */
+.note-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.note-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.note-modal::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 3px;
+}
+
+
 @media (max-width: 600px) {
   .dashboard-header {
     flex-direction: column;
@@ -519,6 +693,19 @@ body {
 
   .editor-save-btn,
   .editor-cancel-btn {
+    width: 100%;
+  }
+
+  .note-modal {
+    padding: 1.5rem;
+    max-height: 90vh;
+  }
+
+  .note-modal-actions {
+    flex-direction: column;
+  }
+
+  .note-modal-actions .btn {
     width: 100%;
   }
 }
